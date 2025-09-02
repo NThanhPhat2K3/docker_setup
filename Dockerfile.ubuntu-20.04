@@ -1,5 +1,5 @@
-# Download base image ubuntu 22.04
-FROM ubuntu:22.04
+# Download base image ubuntu 20.04
+FROM ubuntu:20.04
 
 # Default values if not passed on the build command line
 ARG host_uid=1000
@@ -53,9 +53,7 @@ RUN \
 		libyaml-dev \
 		libssl-dev \
 		bmap-tools \
-		file \
-                liblz4-tool \
-                zstd
+		file
 
 # Setup locales
 RUN \
@@ -65,14 +63,14 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_US.UTF-8
 
-ENV LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8
 
 # Add user account that matches the host
-RUN getent group ${host_gid} || groupadd -g ${host_gid} ${USERNAME}
+RUN groupadd -g $host_gid $USERNAME
 RUN adduser --disabled-password --shell /bin/bash \
-    --uid ${host_uid} --gid ${host_gid} \
-    --gecos '' ${USERNAME}
-RUN adduser ${USERNAME} sudo
+    --uid $host_uid --gid $host_gid \
+    --gecos '' $USERNAME
+RUN adduser $USERNAME sudo
 
 # Configure git using the login user name and gmail
 # NOTE: this is required for yocto but does not need to be a real git account
@@ -83,7 +81,7 @@ RUN git config --global user.name $USERNAME
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # To have a more colorful world
-ENV TERM=xterm-256color
+ENV TERM xterm-256color
 
 # Start the container with user $USERNAME
 USER $USERNAME
