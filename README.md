@@ -261,3 +261,36 @@ sudo apt-get install -y \
     libxcb-xkb1 \
     libxcb-sync1
 ```
+## 4. Issue with VNC
+
+when meet this issue 
+
+```bash
+Can't find file /home/phat/.vnc/35eb01ac9e10:1.pid You'll have to kill the Xtightvnc process manually
+```
+you should check 
+
+```bash
+ps aux | grep Xtightvnc
+```
+
+and kill the process manually
+
+```bash
+kill -9 <PID>
+```
+
+Clean up stale socket files
+
+Sometimes it leaves behind a lock file:
+
+```bash
+rm -f /tmp/.X11-unix/X1
+rm -f /tmp/.X1-lock
+```
+
+Restart VNC server
+
+```bash
+vncserver :1 -geometry 1280x800 -depth 24
+```
