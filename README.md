@@ -134,17 +134,24 @@ docker stop my_container_for_22.04
 
 ## 2.6 Save Container as New Image
 
-If you installed extra packages or configured things inside:
+Commit your container into a new image
 
 ```bash
-docker commit my_container_for_22.04 ubuntu-22.04-custom
+docker commit my_container_for_22.04 ubuntu-22.04-vnc:latest
 ```
-Run from the new image:
+
+Save that image into a .tar archive
 
 ```bash
-docker run -it --name my_custom_container ubuntu-22.04-custom
+docker save -o ubuntu-22.04-vnc.tar ubuntu-22.04-vnc:latest
 ```
+Now you’ll have a file named ubuntu-22.04-vnc.tar in your current directory.
 
+Load it back on another machine
+
+```bash
+docker load -i ubuntu-22.04-vnc.tar
+```
 ## 2.7 Connect
 
 SSH:
